@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klair — Soporte IA para tu negocio</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23f25c38'/><path d='M8 10h16M8 16h10M8 22h13' stroke='white' stroke-width='2.5' stroke-linecap='round'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:   #faf8f3;
+  --cream2:  #f3f0e8;
+  --cream3:  #e8e3d8;
+  --ink:     #0e0d0b;
+  --ink2:    #2d2a24;
+  --ink3:    #6b6557;
+  --coral:   #f25c38;
+  --coral2:  #ff7a5a;
+  --coral-bg:#fff1ed;
+  --green:   #16a34a;
+  --green-bg:#f0fdf4;
+  --white:   #ffffff;
+  --r:       14px;
+  --r-sm:    8px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── NAVBAR ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 64px;
+  background: rgba(250,248,243,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--cream3);
+}
+.logo {
+  font-family: 'Fraunces', serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--ink); letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+.logo span { color: var(--coral); }
+.nav-links {
+  display: flex; gap: 28px;
+  position: absolute; left: 50%; transform: translateX(-50%);
+}
+.nav-links a {
+  text-decoration: none; color: var(--ink3);
+  font-size: 14px; font-weight: 500;
+  transition: color .2s;
+  white-space: nowrap;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.btn-ghost {
+  background: none; border: 1.5px solid var(--cream3);
+  color: var(--ink2); font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  padding: 7px 16px; border-radius: var(--r-sm);
+  transition: all .2s; white-space: nowrap;
+}
+.btn-ghost:hover { border-color: var(--ink3); color: var(--ink); }
+.btn-coral {
+  background: var(--coral); color: #fff;
+  border: none; padding: 8px 18px; border-radius: var(--r-sm);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all .25s; white-space: nowrap;
+}
+.btn-coral:hover {
+  background: #d94f2e;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(242,92,56,.3);
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 80px 40px 0;
+  max-width: 1180px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 64px; align-items: center;
+  min-height: calc(100vh - 64px);
+}
+.hero-text { padding-bottom: 80px; }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--coral-bg);
+  border: 1px solid rgba(242,92,56,.25);
+  padding: 6px 14px; border-radius: 999px;
+  font-size: 12px; font-weight: 600; color: var(--coral);
+  letter-spacing: .4px; margin-bottom: 28px;
+  animation: rise .6s ease both;
+}
+.hero-badge .dot { width: 6px; height: 6px; background: var(--coral); border-radius: 50%; animation: pulse 2s infinite; }
+
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.6)} }
+@keyframes rise  { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+.hero h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(42px, 5vw, 66px);
+  font-weight: 700; line-height: 1.0;
+  letter-spacing: -2.5px;
+  color: var(--ink); margin-bottom: 22px;
+  animation: rise .7s .1s ease both;
+}
+.hero h1 em { font-style: italic; color: var(--coral); font-weight: 400; }
+.hero-sub {
+  font-size: 17px; color: var(--ink3);
+  line-height: 1.75; max-width: 440px;
+  font-weight: 300; margin-bottom: 36px;
+  animation: rise .7s .2s ease both;
+}
+
+/* PRESALE FORM */
+.presale-form {
+  display: flex; flex-direction: column; gap: 12px;
+  animation: rise .7s .3s ease both;
+  margin-bottom: 28px;
+}
+.form-row { display: flex; gap: 10px; }
+.form-input {
+  flex: 1; background: var(--white);
+  border: 1.5px solid var(--cream3);
+  border-radius: var(--r-sm); padding: 12px 16px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px; color: var(--ink);
+  transition: border-color .2s; outline: none;
+}
+.form-input::placeholder { color: var(--ink3); }
+.form-input:focus { border-color: var(--coral); box-shadow: 0 0 0 3px rgba(242,92,56,.1); }
+.btn-presale {
+  background: var(--coral); color: #fff;
+  border: none; padding: 13px 28px; border-radius: var(--r-sm);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  transition: all .25s; letter-spacing: .1px;
+  white-space: nowrap;
+}
+.btn-presale:hover {
+  background: #d94f2e; transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(242,92,56,.3);
+}
+.form-note { font-size: 12px; color: var(--ink3); display: flex; align-items: center; gap: 6px; }
+.form-note::before { content: '🔒'; font-size: 11px; }
+
+.hero-social-proof {
+  display: flex; align-items: center; gap: 14px;
+  animation: rise .7s .4s ease both;
+  padding: 16px; background: var(--white);
+  border: 1px solid var(--cream3); border-radius: var(--r);
+  width: fit-content;
+}
+.proof-icon { font-size: 20px; }
+.proof-text { font-size: 13px; color: var(--ink2); line-height: 1.4; }
+.proof-text strong { color: var(--coral); font-weight: 700; }
+
+/* ── MOCKUP ── */
+.hero-visual {
+  position: relative; padding-bottom: 40px;
+  animation: rise .8s .2s ease both;
+}
+.mockup-window {
+  background: var(--white); border-radius: 18px;
+  border: 1px solid var(--cream3);
+  box-shadow: 0 32px 80px rgba(14,13,11,.12), 0 8px 20px rgba(14,13,11,.06);
+  overflow: hidden; font-size: 12px;
+}
+.mock-topbar {
+  background: var(--cream2); border-bottom: 1px solid var(--cream3);
+  padding: 10px 16px; display: flex; align-items: center; gap: 10px;
+}
+.mock-dots { display: flex; gap: 5px; }
+.mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+.d-r{background:#ff5f57} .d-y{background:#febc2e} .d-g{background:#28c840}
+.mock-tab {
+  background: var(--white); border-radius: 5px;
+  padding: 4px 12px; font-size: 11px; font-weight: 600;
+  color: var(--ink2); display: flex; align-items: center; gap: 5px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+.dot-green { width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+.mock-body { display: grid; grid-template-columns: 195px 1fr; height: 370px; }
+.mock-sidebar {
+  border-right: 1px solid var(--cream2); background: var(--cream); overflow: hidden;
+}
+.mock-sidebar-header {
+  padding: 12px 14px 8px; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .8px; color: var(--ink3);
+}
+.conv-item {
+  padding: 10px 14px; border-bottom: 1px solid rgba(0,0,0,.04); cursor: pointer;
+}
+.conv-item.active { background: var(--white); }
+.conv-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+.conv-name { font-weight: 600; font-size: 11.5px; color: var(--ink); }
+.conv-time { font-size: 9px; color: var(--ink3); }
+.conv-preview { font-size: 10.5px; color: var(--ink3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.conv-badge {
+  display: inline-block; background: var(--coral); color: #fff;
+  font-size: 8px; font-weight: 700; padding: 1px 5px; border-radius: 999px; margin-left: 4px;
+}
+.mock-chat { display: flex; flex-direction: column; background: var(--white); }
+.mock-chat-header {
+  padding: 12px 16px; border-bottom: 1px solid var(--cream2);
+  display: flex; align-items: center; gap: 10px;
+}
+.chat-avatar {
+  width: 30px; height: 30px; border-radius: 50%; background: #ddd6fe;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #6d28d9; flex-shrink: 0;
+}
+.chat-info-name { font-size: 12px; font-weight: 700; color: var(--ink); }
+.chat-info-status { font-size: 10px; color: var(--green); display: flex; align-items: center; gap: 3px; }
+.chat-info-status::before { content:''; width:5px;height:5px;background:var(--green);border-radius:50%; }
+.ai-badge-sm {
+  margin-left: auto; background: var(--coral-bg);
+  border: 1px solid rgba(242,92,56,.2); color: var(--coral);
+  font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 999px;
+}
+.chat-messages {
+  flex: 1; padding: 14px 16px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.msg { max-width: 80%; }
+.msg-user { align-self: flex-end; }
+.msg-ai   { align-self: flex-start; }
+.msg-bubble { padding: 8px 12px; border-radius: 12px; font-size: 11px; line-height: 1.55; }
+.msg-user .msg-bubble { background: var(--ink); color: #fff; border-radius: 12px 12px 3px 12px; }
+.msg-ai .msg-bubble { background: var(--cream); color: var(--ink2); border-radius: 12px 12px 12px 3px; }
+.msg-meta { font-size: 9px; color: var(--ink3); margin-top: 3px; text-align: right; }
+.msg-ai .msg-meta { text-align: left; display: flex; align-items: center; gap: 4px; }
+.msg-ai .msg-meta::before { content:'⚡'; font-size:8px; color: var(--coral); }
+.chat-input-bar {
+  padding: 10px 14px; border-top: 1px solid var(--cream2);
+  display: flex; gap: 8px; align-items: center;
+}
+.chat-input-fake {
+  flex: 1; background: var(--cream); border-radius: 20px;
+  padding: 7px 14px; font-size: 10.5px; color: var(--ink3);
+  border: 1px solid var(--cream3);
+}
+.chat-send-btn {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--coral);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.chat-send-btn svg { width: 12px; height: 12px; fill: #fff; }
+.stat-float {
+  position: absolute; background: var(--white);
+  border: 1px solid var(--cream3); border-radius: var(--r);
+  padding: 12px 16px; box-shadow: 0 8px 24px rgba(14,13,11,.1); min-width: 145px;
+}
+.stat-float.left  { bottom: 55px; left: -28px; }
+.stat-float.right { top: 55px; right: -18px; }
+.sf-label { font-size: 10px; color: var(--ink3); font-weight: 500; margin-bottom: 4px; }
+.sf-value { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--ink); letter-spacing: -1px; line-height: 1; }
+.sf-sub { font-size: 10px; color: var(--green); font-weight: 600; margin-top: 3px; }
+
+/* ── CONTAINER ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+section { padding: 88px 0; }
+.s-label { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--coral); margin-bottom: 14px; }
+.s-title { font-family: 'Fraunces', serif; font-size: clamp(30px, 4vw, 44px); font-weight: 700; letter-spacing: -2px; line-height: 1.05; margin-bottom: 16px; }
+.s-title em { font-style: italic; font-weight: 400; }
+.s-sub { font-size: 16px; color: var(--ink3); line-height: 1.7; font-weight: 300; max-width: 520px; }
+
+/* ── HOW IT WORKS ── */
+.how-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 2px; margin-top: 52px;
+  background: var(--cream3); border-radius: var(--r); overflow: hidden;
+  border: 1px solid var(--cream3);
+}
+.how-step { background: var(--white); padding: 40px 34px; transition: background .2s; }
+.how-step:hover { background: var(--cream); }
+.step-num {
+  font-family: 'Fraunces', serif; font-size: 60px; font-weight: 700;
+  color: var(--cream2); line-height: 1; margin-bottom: 18px; letter-spacing: -3px;
+}
+.how-step h3 { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; letter-spacing: -.8px; margin-bottom: 10px; color: var(--ink); }
+.how-step p  { font-size: 14px; color: var(--ink3); line-height: 1.65; }
+.step-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; margin-bottom: 18px;
+}
+.step-icon svg { width: 20px; height: 20px; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+
+/* ── FEATURES — fondo crema oscuro, NO negro ── */
+.features-section {
+  background: var(--ink2);
+}
+.features-section .s-label { color: var(--coral2); }
+.features-section .s-title { color: #faf8f3; }
+.features-section .s-sub   { color: rgba(250,248,243,.65); }
+.features-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 2px; margin-top: 52px;
+  background: rgba(255,255,255,.06);
+  border-radius: var(--r); overflow: hidden;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.feat-card {
+  background: #1e1c17; padding: 38px;
+  transition: background .2s;
+}
+.feat-card:hover { background: #252218; }
+.feat-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: rgba(242,92,56,.15); border: 1px solid rgba(242,92,56,.25);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 22px;
+}
+.feat-icon svg { width: 20px; height: 20px; stroke: var(--coral2); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.feat-card h3 { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; letter-spacing: -.8px; color: #faf8f3; margin-bottom: 10px; }
+.feat-card p  { font-size: 14px; color: rgba(250,248,243,.6); line-height: 1.65; }
+.feat-tag {
+  display: inline-block; margin-top: 16px; background: rgba(242,92,56,.12);
+  color: var(--coral2); font-size: 11px; font-weight: 600;
+  padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(242,92,56,.2);
+}
+
+/* ── EARLY ACCESS — reemplaza testimonials ── */
+.early-section { background: var(--cream2); border-top: 1px solid var(--cream3); border-bottom: 1px solid var(--cream3); }
+.early-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 52px; }
+.early-card {
+  background: var(--white); border: 1px solid var(--cream3);
+  border-radius: var(--r); padding: 32px;
+  transition: all .3s;
+}
+.early-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(14,13,11,.08); }
+.early-card-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 20px;
+}
+.early-card h3 { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; letter-spacing: -.8px; color: var(--ink); margin-bottom: 10px; }
+.early-card p { font-size: 14px; color: var(--ink3); line-height: 1.65; }
+.early-tag {
+  display: inline-block; margin-top: 16px;
+  font-size: 11px; font-weight: 700; padding: 4px 12px;
+  border-radius: 999px; letter-spacing: .5px;
+}
+.tag-coral { background: var(--coral-bg); color: var(--coral); border: 1px solid rgba(242,92,56,.2); }
+.tag-green { background: var(--green-bg); color: var(--green); border: 1px solid rgba(22,163,74,.2); }
+.tag-blue  { background: #eff6ff; color: #2563eb; border: 1px solid rgba(37,99,235,.2); }
+
+/* ── PRICING ── */
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px; margin-top: 52px; align-items: start;
+}
+.plan {
+  background: var(--white); border: 1.5px solid var(--cream3);
+  border-radius: var(--r); padding: 36px 30px; transition: all .3s;
+}
+.plan:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(14,13,11,.1); }
+.plan.popular { background: var(--ink); border-color: var(--ink); }
+.popular-badge {
+  background: var(--coral); color: #fff; font-size: 10px; font-weight: 700;
+  padding: 4px 12px; border-radius: 999px; display: inline-block;
+  margin-bottom: 20px; letter-spacing: .5px;
+}
+.plan-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--ink3); margin-bottom: 14px; }
+.popular .plan-name { color: rgba(250,248,243,.45); }
+.plan-price { display: flex; align-items: baseline; gap: 3px; margin-bottom: 6px; }
+.price-num { font-family: 'Fraunces', serif; font-size: 50px; font-weight: 700; letter-spacing: -3px; color: var(--ink); line-height: 1; }
+.popular .price-num { color: #faf8f3; }
+.price-cur { font-size: 18px; color: var(--ink3); }
+.popular .price-cur { color: rgba(250,248,243,.45); }
+.price-per { font-size: 13px; color: var(--ink3); }
+.popular .price-per { color: rgba(250,248,243,.4); }
+.plan-convs { font-size: 13px; color: var(--ink3); margin-bottom: 24px; }
+.popular .plan-convs { color: rgba(250,248,243,.5); }
+.plan-hr { border: none; border-top: 1px solid var(--cream3); margin-bottom: 22px; }
+.popular .plan-hr { border-color: rgba(255,255,255,.1); }
+.plan-feats { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+.plan-feats li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--ink2); }
+.popular .plan-feats li { color: rgba(250,248,243,.75); }
+.checkmark {
+  width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+  background: var(--green-bg); border: 1px solid rgba(22,163,74,.2);
+  display: flex; align-items: center; justify-content: center;
+}
+.checkmark svg { width: 10px; height: 10px; stroke: var(--green); stroke-width: 2.5; fill: none; }
+.popular .checkmark { background: rgba(22,163,74,.15); border-color: rgba(22,163,74,.3); }
+.plan-btn {
+  width: 100%; padding: 12px; border-radius: var(--r-sm);
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all .25s;
+  background: transparent; color: var(--ink); border: 1.5px solid var(--cream3);
+}
+.plan-btn:hover { border-color: var(--ink3); background: var(--cream); }
+.popular .plan-btn { background: var(--coral); color: #fff; border-color: var(--coral); }
+.popular .plan-btn:hover { background: #d94f2e; box-shadow: 0 8px 24px rgba(242,92,56,.35); transform: translateY(-1px); }
+.plan-note { font-size: 11px; color: var(--ink3); text-align: center; margin-top: 12px; }
+.popular .plan-note { color: rgba(250,248,243,.35); }
+
+/* ── CTA FINAL ── */
+.cta-section { padding: 100px 40px; max-width: 1100px; margin: 0 auto; text-align: center; }
+.cta-inner {
+  background: var(--ink); border-radius: 24px; padding: 72px 48px;
+  position: relative; overflow: hidden;
+}
+.cta-inner::before {
+  content: ''; position: absolute;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(242,92,56,.18), transparent 70%);
+  top: -100px; right: -80px; pointer-events: none;
+}
+.cta-inner::after {
+  content: ''; position: absolute;
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(242,92,56,.1), transparent 70%);
+  bottom: -80px; left: -60px; pointer-events: none;
+}
+.cta-inner h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(34px, 5vw, 52px); font-weight: 700;
+  letter-spacing: -2.5px; line-height: 1.05;
+  color: #faf8f3; margin-bottom: 14px; position: relative;
+}
+.cta-inner h2 em { font-style: italic; font-weight: 400; color: var(--coral2); }
+.cta-inner > p { font-size: 16px; color: rgba(250,248,243,.55); margin-bottom: 36px; position: relative; font-weight: 300; }
+.cta-form {
+  display: flex; gap: 10px; justify-content: center;
+  flex-wrap: wrap; position: relative; margin-bottom: 16px;
+}
+.cta-form .form-input {
+  max-width: 280px; background: rgba(255,255,255,.07);
+  border-color: rgba(255,255,255,.15); color: #faf8f3;
+}
+.cta-form .form-input::placeholder { color: rgba(250,248,243,.35); }
+.cta-form .form-input:focus { border-color: var(--coral2); box-shadow: 0 0 0 3px rgba(242,92,56,.15); }
+.cta-note { font-size: 12px; color: rgba(250,248,243,.35); position: relative; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--cream3);
+  padding: 40px; max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+}
+.footer-logo { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--ink); }
+.footer-logo span { color: var(--coral); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { text-decoration: none; font-size: 13px; color: var(--ink3); transition: color .2s; }
+.footer-links a:hover { color: var(--ink); }
+.footer-copy { font-size: 12px; color: var(--ink3); }
+
+/* ── SCROLL REVEAL ── */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--ink); color: #faf8f3; padding: 14px 24px; border-radius: var(--r-sm);
+  font-size: 14px; font-weight: 500; z-index: 9999;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+  white-space: nowrap;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+#toast span { color: var(--coral2); font-weight: 700; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; padding: 56px 20px 0; min-height: auto; }
+  .hero-visual { display: none; }
+  .how-grid, .features-grid, .pricing-grid, .early-grid { grid-template-columns: 1fr; }
+  .container { padding: 0 20px; }
+  .cta-section { padding: 56px 20px; }
+  footer { flex-direction: column; align-items: flex-start; }
+  .form-row { flex-direction: column; }
+  .cta-form { flex-direction: column; align-items: center; }
+  .cta-form .form-input { max-width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="toast">✅ ¡Listo! Te contactamos pronto, <span id="toast-name">amigo</span> 🎉</div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">Klair<span>.</span></div>
+  <div class="nav-links">
+    <a href="#como-funciona">Cómo funciona</a>
+    <a href="#funcionalidades">Funcionalidades</a>
+    <a href="#precios">Precios</a>
+    <a href="#acceso">Acceso anticipado</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-ghost" onclick="document.getElementById('hero-email').focus();document.getElementById('hero-email').scrollIntoView({behavior:'smooth'})">Ver demo</button>
+    <button class="btn-coral" onclick="document.getElementById('hero-email').focus();document.getElementById('hero-email').scrollIntoView({behavior:'smooth'})">Acceso anticipado</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-text">
+    <div class="hero-badge"><div class="dot"></div>Lanzamiento próximo — Cupos piloto limitados</div>
+    <h1>Soporte <em>24/7</em><br>sin contratar<br>un equipo</h1>
+    <p class="hero-sub">Klair gestiona las conversaciones de tus clientes con IA entrenada para tu negocio. Sin código. Sin complicaciones. Sé de los primeros en probarlo.</p>
+
+    <div class="presale-form">
+      <div class="form-row">
+        <input class="form-input" id="hero-name" type="text" placeholder="Tu nombre">
+        <input class="form-input" id="hero-email" type="email" placeholder="Tu email o WhatsApp">
+      </div>
+      <button class="btn-presale" onclick="handleSignup('hero-name','hero-email')">Quiero acceso anticipado gratis →</button>
+    </div>
+    <p class="form-note">Sin spam. Sin tarjeta de crédito. Te avisamos cuando esté listo.</p>
+
+    <div class="hero-social-proof" style="margin-top:20px">
+      <div class="proof-icon">🚀</div>
+      <div class="proof-text">Estamos construyendo Klair.<br><strong>Sé cliente piloto</strong> y accede antes que todos, gratis.</div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="mockup-window">
+      <div class="mock-topbar">
+        <div class="mock-dots">
+          <div class="mock-dot d-r"></div>
+          <div class="mock-dot d-y"></div>
+          <div class="mock-dot d-g"></div>
+        </div>
+        <div class="mock-tab"><div class="dot-green"></div>Bandeja de entrada</div>
+      </div>
+      <div class="mock-body">
+        <div class="mock-sidebar">
+          <div class="mock-sidebar-header">Conversaciones</div>
+          <div class="conv-item active">
+            <div class="conv-top"><span class="conv-name">María López</span><span class="conv-time">ahora</span></div>
+            <div class="conv-preview">No encuentro mi pedido</div>
+          </div>
+          <div class="conv-item">
+            <div class="conv-top"><span class="conv-name">Carlos R. <span class="conv-badge">IA</span></span><span class="conv-time">2m</span></div>
+            <div class="conv-preview">¿Cómo cancelo mi suscripción?</div>
+          </div>
+          <div class="conv-item">
+            <div class="conv-top"><span class="conv-name">Ana Fuentes</span><span class="conv-time">5m</span></div>
+            <div class="conv-preview">Problema con el pago</div>
+          </div>
+          <div class="conv-item">
+            <div class="conv-top"><span class="conv-name">Roberto M.</span><span class="conv-time">18m</span></div>
+            <div class="conv-preview">¿Tienen plan anual?</div>
+          </div>
+          <div class="conv-item">
+            <div class="conv-top"><span class="conv-name">Lucía V.</span><span class="conv-time">1h</span></div>
+            <div class="conv-preview">Error al iniciar sesión</div>
+          </div>
+        </div>
+        <div class="mock-chat">
+          <div class="mock-chat-header">
+            <div class="chat-avatar">ML</div>
+            <div>
+              <div class="chat-info-name">María López</div>
+              <div class="chat-info-status">En línea ahora</div>
+            </div>
+            <div class="ai-badge-sm">⚡ IA activa</div>
+          </div>
+          <div class="chat-messages">
+            <div class="msg msg-user">
+              <div class="msg-bubble">Hola, no encuentro mi pedido #4821. Ya pasaron 3 días.</div>
+              <div class="msg-meta">10:42</div>
+            </div>
+            <div class="msg msg-ai">
+              <div class="msg-bubble">¡Hola María! Revisé tu pedido #4821 — está en camino con DHL. Llegará mañana antes de las 18h. Te envío el link de seguimiento.</div>
+              <div class="msg-meta">10:42 · 1.2s</div>
+            </div>
+            <div class="msg msg-user">
+              <div class="msg-bubble">¡Perfecto, muchas gracias!</div>
+              <div class="msg-meta">10:43</div>
+            </div>
+            <div class="msg msg-ai">
+              <div class="msg-bubble">Con gusto 😊 ¿Hay algo más en lo que pueda ayudarte?</div>
+              <div class="msg-meta">10:43 · 0.8s</div>
+            </div>
+          </div>
+          <div class="chat-input-bar">
+            <div class="chat-input-fake">Escribe una respuesta...</div>
+            <div class="chat-send-btn"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-float left">
+      <div class="sf-label">Tiempo de respuesta</div>
+      <div class="sf-value">1.2s</div>
+      <div class="sf-sub">vs 4h promedio humano</div>
+    </div>
+    <div class="stat-float right">
+      <div class="sf-label">Consultas resueltas</div>
+      <div class="sf-value">82%</div>
+      <div class="sf-sub">↑ Sin intervención</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="como-funciona">
+  <div class="container">
+    <div class="reveal">
+      <span class="s-label">Cómo funciona</span>
+      <h2 class="s-title">Activo en <em>10 minutos</em></h2>
+      <p class="s-sub">Sin desarrolladores, sin integraciones complejas. Tres pasos y tu soporte está automatizado.</p>
+    </div>
+    <div class="how-grid reveal" style="transition-delay:.1s">
+      <div class="how-step">
+        <div class="step-icon" style="background:#fff7ed; border:1px solid #fed7aa">
+          <svg viewBox="0 0 24 24" stroke="#ea580c"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <div class="step-num">01</div>
+        <h3>Entrena con tu negocio</h3>
+        <p>Sube tus FAQs, catálogo, PDFs o escribe las respuestas. Klair aprende cómo habla tu marca en minutos.</p>
+      </div>
+      <div class="how-step">
+        <div class="step-icon" style="background:#f0fdf4; border:1px solid #bbf7d0">
+          <svg viewBox="0 0 24 24" stroke="#16a34a"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="step-num">02</div>
+        <h3>Instala el widget</h3>
+        <p>Una línea de código en tu web o activa el canal de WhatsApp. Sin configuración técnica adicional.</p>
+      </div>
+      <div class="how-step">
+        <div class="step-icon" style="background:#fff1ed; border:1px solid #fecaca">
+          <svg viewBox="0 0 24 24" stroke="#f25c38"><path d="M13 2L4 14h7l-1 8 10-14h-7z"/></svg>
+        </div>
+        <div class="step-num">03</div>
+        <h3>La IA trabaja por ti</h3>
+        <p>Klair responde al instante, 24/7. Si no puede resolver algo, escala la conversación a tu equipo humano.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section" id="funcionalidades">
+  <div class="container">
+    <div class="reveal">
+      <span class="s-label">Funcionalidades</span>
+      <h2 class="s-title">Todo lo que tu<br>soporte <em>necesita</em></h2>
+      <p class="s-sub">Una plataforma completa que reemplaza herramientas dispersas y equipos costosos.</p>
+    </div>
+    <div class="features-grid reveal" style="transition-delay:.1s">
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3>Bandeja unificada</h3>
+        <p>Todas tus conversaciones — web, WhatsApp, email — en un solo lugar. Tu equipo nunca pierde el hilo.</p>
+        <div class="feat-tag">Omnicanal</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 1 0 18c-1.5 0-2.9-.4-4.1-1.1L3 21l2.1-4.9A9 9 0 0 1 12 2z"/></svg></div>
+        <h3>Base de conocimiento IA</h3>
+        <p>Sube tus documentos y la IA los convierte en respuestas precisas. Actualiza en tiempo real sin reentrenar.</p>
+        <div class="feat-tag">Auto-aprendizaje</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Handoff inteligente</h3>
+        <p>Cuando la IA detecta frustración, transfiere a un agente humano con todo el contexto cargado automáticamente.</p>
+        <div class="feat-tag">Sin fricción</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <h3>Analytics de satisfacción</h3>
+        <p>CSAT automático, temas frecuentes, tiempos de respuesta. Decisiones basadas en datos reales.</p>
+        <div class="feat-tag">Dashboard en vivo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EARLY ACCESS — reemplaza testimonials falsos -->
+<section class="early-section" id="acceso">
+  <div class="container">
+    <div class="reveal" style="text-align:center">
+      <span class="s-label">Acceso anticipado</span>
+      <h2 class="s-title">Sé de los <em>primeros</em><br>en probarlo</h2>
+      <p class="s-sub" style="margin:0 auto">Estamos en fase piloto. Los primeros clientes obtienen precio especial y atención directa del equipo.</p>
+    </div>
+    <div class="early-grid reveal" style="transition-delay:.1s">
+      <div class="early-card">
+        <div class="early-card-icon" style="background:#fff1ed">🎁</div>
+        <h3>Gratis los primeros 3 meses</h3>
+        <p>Los clientes piloto usan Klair sin costo durante la fase de prueba. Solo pedimos feedback honesto.</p>
+        <div class="early-tag tag-coral">PILOTO GRATIS</div>
+      </div>
+      <div class="early-card">
+        <div class="early-card-icon" style="background:#f0fdf4">⚡</div>
+        <h3>Lo construimos para ti</h3>
+        <p>Nos sentamos contigo, entendemos tu negocio y configuramos todo. Tú no tienes que tocar nada técnico.</p>
+        <div class="early-tag tag-green">SETUP INCLUIDO</div>
+      </div>
+      <div class="early-card">
+        <div class="early-card-icon" style="background:#eff6ff">🔒</div>
+        <h3>Precio bloqueado para siempre</h3>
+        <p>Los pilotos obtienen el precio de lanzamiento permanentemente, sin importar cómo escale el producto.</p>
+        <div class="early-tag tag-blue">PRECIO FIJO</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="precios">
+  <div class="container">
+    <div class="reveal" style="text-align:center">
+      <span class="s-label">Precios</span>
+      <h2 class="s-title">Paga por conversaciones,<br>no por <em>asientos</em></h2>
+      <p class="s-sub" style="margin:0 auto">Sin sorpresas al final del mes. Cancela cuando quieras.</p>
+    </div>
+    <div class="pricing-grid reveal" style="transition-delay:.1s">
+      <div class="plan">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price"><span class="price-cur">$</span><span class="price-num">19</span><span class="price-per">/mes</span></div>
+        <p class="plan-convs">500 conversaciones incluidas</p>
+        <hr class="plan-hr">
+        <ul class="plan-feats">
+          <li><div class="checkmark"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>1 canal (web chat)</li>
+          <li><div class="checkmark"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Base de conocimiento hasta 30 docs</li>
+          <li><div class="checkmark"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Handoff a humano</li>
+          <li><div class="checkmark"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Analytics básico</li>
+        </ul>
+        <button class="plan-btn" onclick="document.getElementById('cta-email').focus();document.getElementById('cta-email').scrollIntoView({behavior:'smooth'})">Quiero acceso anticipado</button>
+        <p class="plan-note">Gratis los primeros 3 meses</p>
+      </div>
+      <div class="plan popular">
+        <div class="popular-badge">MÁS POPULAR</div>
+        <div class="plan-name">Growth</div>
+        <div class="plan-price"><span class="price-cur">$</span><span class="price-num">49</span><span class="price-per">/mes</span></div>
+        <p class="plan-convs">5,000 conversaciones incluidas</p>
+        <hr class="plan-hr">
+        <ul class="plan-feats">
+          <li><div class="checkmark"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>3 canales (web, WhatsApp, email)</li>
+          <li><div class="checkmark"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Docs ilimitados</li>
+          <li><div class="checkmark"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>5 agentes humanos</li>
+          <li><div class="checkmark"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Analytics completo + CSAT</li>
+          <li><div class="checkmark"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Soporte prioritario</li>
+        </ul>
+        <button class="plan-btn" onclick="document.getElementById('cta-email').focus();document.getElementById('cta-email').scrollIntoView({behavior:'smooth'})">Quiero acceso anticipado</button>
+        <p class="plan-note">Gratis los primeros 3 meses</p>
+      </div>
+      <div class="plan">
+        <div class="plan-name">Scale</div>
+        <div class="plan-price"><span class="price-cur">$</span><span class="price-num">149</span><span class="price-per">/mes</span></div>
+        <p class="plan-convs">Conversaciones ilimitadas</p>
+        <hr class="plan-hr">
+        <ul class="plan-feats">
+          <li><div class="checkmark"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Canales ilimitados</li>
+          <li><div class="checkmark"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Agentes ilimitados</li>
+          <li><div class="checkmark"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Modelo IA personalizado</li>
+          <li><div class="checkmark"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>API + integraciones (Slack, CRM)</li>
+          <li><div class="checkmark"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>Soporte dedicado 24/7</li>
+        </ul>
+        <button class="plan-btn" onclick="document.getElementById('cta-email').focus();document.getElementById('cta-email').scrollIntoView({behavior:'smooth'})">Hablar con el equipo</button>
+        <p class="plan-note">Gratis los primeros 3 meses</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<div class="cta-section">
+  <div class="cta-inner reveal">
+    <h2>Tu soporte merece<br><em>trabajar solo</em></h2>
+    <p>Cupos piloto limitados. Sin tarjeta de crédito. Acceso gratis los primeros 3 meses.</p>
+    <div class="cta-form">
+      <input class="form-input" id="cta-name" type="text" placeholder="Tu nombre">
+      <input class="form-input" id="cta-email" type="email" placeholder="Email o WhatsApp">
+      <button class="btn-presale" onclick="handleSignup('cta-name','cta-email')">Reservar mi lugar →</button>
+    </div>
+    <p class="cta-note">🔒 Sin spam. Te contactamos en menos de 24h.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Klair<span>.</span></div>
+  <div class="footer-links">
+    <a href="#">Producto</a>
+    <a href="#">Precios</a>
+    <a href="#">Contacto</a>
+  </div>
+  <div class="footer-copy">© 2026 Klair — Soporte IA para negocios modernos</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Signup handler
+  function handleSignup(nameId, emailId) {
+    const name  = document.getElementById(nameId).value.trim();
+    const email = document.getElementById(emailId).value.trim();
+    if (!email) {
+      document.getElementById(emailId).focus();
+      document.getElementById(emailId).style.borderColor = 'var(--coral)';
+      setTimeout(() => document.getElementById(emailId).style.borderColor = '', 2000);
+      return;
+    }
+    document.getElementById('toast-name').textContent = name || 'amigo';
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+    document.getElementById(nameId).value  = '';
+    document.getElementById(emailId).value = '';
+  }
+</script>
+</body>
+</html>
